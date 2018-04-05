@@ -1,0 +1,69 @@
+<div class="valign-parent full-height login-page-background relative">
+    <div class="row valign-child div-center">
+        <div>
+            <form class="sign-up-form" name="signupCtrl.signUpForm" novalidate ng-submit="signupCtrl.signUpForm.$valid  ? signupCtrl.signup() : '';">
+                <h2 class="margin-bottom-0 color-white">Create An Account</h2>
+                <div class="row">
+                    <div class="col">
+                        <input class="form-control" placeholder="Full Name" maxlength="20" autocomplete="off" ng-class="{'required-error' : (signupCtrl.signUpForm.name.$error.required || signupCtrl.signUpForm.name.$error.pattern) && (signupCtrl.signUpForm.name.$dirty || signupCtrl.signUpForm.$submitted), 'margin-bottom-5': !(signupCtrl.signUpForm.name.$error.pattern && (signupCtrl.signUpForm.name.$dirty || signupCtrl.signUpForm.$submitted))}"
+                            ng-required="true" type="text" name="name" ng-model="signupCtrl.user.name" ng-pattern="signupCtrl.VALID_PATTERN.ALPHA_REGEX"
+                        />
+                        <div class="error-text padding-left-10" style="font-size: 0.8em !important; height:5px !important;" ng-if="signupCtrl.signUpForm.name.$error.pattern && (signupCtrl.signUpForm.name.$dirty || signupCtrl.signUpForm.$submitted)">
+                            <span ng-bind="signupCtrl.ERROR_MESSAGE.INVALID_NAME"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <input class="form-control" placeholder="Email Address" autocomplete="off" ng-class="{'required-error' : (signupCtrl.signUpForm.email.$error.required && (signupCtrl.signUpForm.email.$dirty || signupCtrl.signUpForm.$submitted)) || (signupCtrl.signUpForm.email.$error.pattern && (signupCtrl.signUpForm.email.$dirty || signupCtrl.signUpForm.$submitted))}"
+                            ng-required="true" type="text" name="email" ng-model="signupCtrl.user.email" ng-pattern="signupCtrl.VALID_PATTERN.EMAIL_REGEX"
+                        />
+                        <div class="error-text" style="font-size: 0.8em !important; height:5px !important;">
+                            <span ng-if="signupCtrl.signUpForm.email.$error.pattern && (signupCtrl.signUpForm.email.$dirty || signupCtrl.signUpForm.$submitted)"
+                                ng-bind="signupCtrl.ERROR_MESSAGE.INVALID_EMAIL">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row"> 
+                    <div class="col">
+                        <input class="form-control" ng-minlength="6" placeholder="Password" autocomplete="off" ng-class="{'required-error' : (signupCtrl.signUpForm.password.$error.required && (signupCtrl.signUpForm.password.$dirty || signupCtrl.signUpForm.$submitted)) || (signupCtrl.signUpForm.password.$error.pattern && (signupCtrl.signUpForm.password.$dirty || signupCtrl.signUpForm.$submitted))}"
+                            ng-required="true" type="password" name="password" ng-model="signupCtrl.user.password" />
+                        <div class="error-text" style="font-size: 0.8em !important; height:5px !important;">
+                            <span ng-if="signupCtrl.signUpForm.password.$error.minlength && (signupCtrl.signUpForm.password.$dirty || signupCtrl.signUpForm.$submitted)"
+                                ng-bind="signupCtrl.ERROR_MESSAGE.INVALID_PASSWORD">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <input class="form-control" ng-minlength="6" placeholder="Confirm Password" autocomplete="off" ng-class="{'required-error' : (signupCtrl.signUpForm.confirm_password.$error.required && (signupCtrl.signUpForm.confirm_password.$dirty || signupCtrl.signUpForm.$submitted)) || (signupCtrl.signUpForm.confirm_password.$error.pattern && (signupCtrl.signUpForm.confirm_password.$dirty || signupCtrl.signUpForm.$submitted))}"
+                            ng-required="true" type="password" name="confirm_password" ng-model="signupCtrl.user.confirm_password" ng-pattern="signupCtrl.user.password"
+                        />
+                        <div class="error-text" style="font-size: 0.8em !important; height:5px !important;">
+                            <span ng-if="signupCtrl.user.confirm_password !== signupCtrl.user.password && (signupCtrl.signUpForm.confirm_password.$dirty || signupCtrl.signUpForm.$submitted)"
+                                ng-bind="signupCtrl.ERROR_MESSAGE.MISMATCH_PASSWORD">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <select class="form-control login-application-for-select" ng-model="signupCtrl.user.user_role" name="user_role" ng-class="{'required-error' : (signupCtrl.signUpForm.user_role.$error.required && (signupCtrl.signUpForm.user_role.$dirty
+                        || signupCtrl.signUpForm.$submitted)) || (signupCtrl.signUpForm.user_role.$error.pattern && (signupCtrl.signUpForm.user_role.$dirty
+                        || signupCtrl.signUpForm.$submitted))}" ng-required="true">
+                            <option value="">Select Role</option>
+                            <option value="admin">Admin</option>
+                            <option value="buyer">Buyer</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-default">Get Started</button>
+                <p class="forgot margin-top-10 text-center">
+                    <a href="javascript:void(0);" ui-sref="login">Already have an account</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>

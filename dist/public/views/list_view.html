@@ -1,0 +1,126 @@
+<nav class="navbar navbar-default navbar-fixed-top padding-10">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" uib-collapse="nonFacultyCtrl.isNavCollapsed">
+            <div class="nav navbar-nav navbar-left display-block">
+                <h3 class="margin-0" ng-bind="listViewCtrl.currentUser.profile.name"></h3>
+            </div>
+            <div class="nav navbar-nav navbar-right display-block">
+                <button ng-if="listViewCtrl.currentUser.user_role === 'admin'" ng-click="listViewCtrl.openCreateUpdateModal();" type="button"
+                    class="btn btn-primary">Add New</button>
+                <button type="button" class="btn btn-primary" ng-click="listViewCtrl.logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid has-header">
+    <div>
+        <div class="row text-left padding-10 row-header">
+            <div class="word-wrap bold" ng-class="listViewCtrl.currentUser.user_role !== 'admin' ? 'col-sm-3': 'col-sm-2'">
+                Company Name
+            </div>
+            <div class="word-wrap bold" ng-class="listViewCtrl.currentUser.user_role !== 'admin' ? 'col-sm-3': 'col-sm-2'">
+                Company Abbreviation
+            </div>
+            <div class="word-wrap bold col-sm-1">
+                Price
+            </div>
+            <div class="word-wrap bold col-sm-2">
+                Market Capacity
+            </div>
+            <div class="word-wrap bold col-sm-1">
+                Change
+            </div>
+            <div class="word-wrap bold col-sm-2">
+                Change %
+            </div>
+            <div class="word-wrap bold col-sm-2" ng-if="listViewCtrl.currentUser.user_role === 'admin'">
+                Action
+            </div>
+        </div>
+        <div class="row text-left padding-10 card" ng-repeat="(info_key, share ) in listViewCtrl.sharesList track by  share._id">
+            <div class="word-wrap " ng-class="listViewCtrl.currentUser.user_role !== 'admin' ? 'col-sm-3': 'col-sm-2'">
+                <span ng-bind="share.company_name"></span>
+            </div>
+            <div class="word-wrap " ng-class="listViewCtrl.currentUser.user_role !== 'admin' ? 'col-sm-3': 'col-sm-2'">
+                <span ng-bind="share.company_abbreviation"></span>
+            </div>
+            <div class="word-wrap col-sm-1">
+                <span ng-bind="share.price"></span>
+            </div>
+            <div class="word-wrap col-sm-2">
+                <span ng-bind="share.market_capacity.price"></span>
+                <span ng-bind="share.market_capacity.currency"></span>
+            </div>
+            <div class="word-wrap col-sm-1">
+                <span class="glyphicon glyphicon-plus" ng-class="share.change_value.sign === 'plus' ? 'glyphicon-plus green-plus': 'glyphicon-minus  red-minus'"></span>
+                <span ng-bind="share.change_value.value"></span>
+            </div>
+            <div class="word-wrap col-sm-2">
+                <span class="glyphicon glyphicon-plus" ng-class="share.change_percentage.sign === 'plus' ? 'glyphicon-plus  green-plus': 'glyphicon-minus red-minus'"></span>
+                <span ng-bind="share.change_percentage.value"></span> %
+            </div>
+            <div class="word-wrap col-sm-2" ng-if="listViewCtrl.currentUser.user_role === 'admin'">
+                <button ng-click="listViewCtrl.openCreateUpdateModal(share, info_key);" type="button" class="btn btn-primary">Edit</button>
+                <button ng-click="listViewCtrl.deleteShare(share._id, info_key);" type="button" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+        <div class="row text-center padding-10" ng-if="listViewCtrl.currentPage - 1 * listViewCtrl.sharesList.length <= listViewCtrl.sharesListTotal">
+            <button ng-click="listViewCtrl.getSharesList(listViewCtrl.currentPage);" type="button"
+                class="btn btn-primary">Load More</button>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/ng-template" id="createUpdateShares.html">
+    <div class="modal-header forgot-modal">
+        <h2 class="modal-title" id="modal-title"><b  ng-bind="modalCtrl.modalTitle"></b></h2>
+    </div>
+    <form class="padding-30" name="modalCtrl.sharesForm" novalidate ng-submit="modalCtrl.sharesForm.$valid ? modalCtrl.submitDetail() : '';">
+        <div class="modal-body forgot-modal-body" id="modal-body">
+            <div class="row">
+                <div class="word-wrap col-sm-6 form-group">
+                        <label for="company_name">Company name:</label>
+                        <input class="form-control" placeholder="Company name" autocomplete="off" ng-class="{'required-error' : (modalCtrl.sharesForm.company_name.$error.required && (modalCtrl.sharesForm.company_name.$dirty || modalCtrl.sharesForm.$submitted)) || (modalCtrl.sharesForm.company_name.$error.pattern && (modalCtrl.sharesForm.company_name.$dirty || modalCtrl.sharesForm.$submitted))}"
+                            id="company_name" ng-required="true" type="text" name="company_name" ng-model="modalCtrl.share_info.company_name" 
+                        />
+                </div>
+                <div class="word-wrap col-sm-6 form-group">
+                    <label for="company_abbreviation">Company abbreviation:</label>
+                    <input  id="company_abbreviation"  class="form-control" placeholder="Company abbreviation" autocomplete="off" ng-class="{'required-error' : (modalCtrl.sharesForm.company_abbreviation.$error.required && (modalCtrl.sharesForm.company_abbreviation.$dirty || modalCtrl.sharesForm.$submitted)) || (modalCtrl.sharesForm.company_abbreviation.$error.pattern && (modalCtrl.sharesForm.company_abbreviation.$dirty || modalCtrl.sharesForm.$submitted))}"
+                        ng-required="true" type="text" name="company_abbreviation" ng-model="modalCtrl.share_info.company_abbreviation" 
+                    />
+                </div>  
+            </div> 
+             <div class="row">
+                <div class="word-wrap col-sm-4 form-group">
+                        <label for="price">Price:</label>
+                        <input class="form-control" placeholder="Price" autocomplete="off" ng-class="{'required-error' : ((modalCtrl.sharesForm.price.$error.required  || modalCtrl.sharesForm.price.$error.min) && (modalCtrl.sharesForm.price.$dirty || modalCtrl.sharesForm.$submitted)) || (modalCtrl.sharesForm.price.$error.pattern && (modalCtrl.sharesForm.price.$dirty || modalCtrl.sharesForm.$submitted))}"
+                            id="price" ng-required="true" type="number" min="0" name="price" ng-model="modalCtrl.share_info.price" 
+                        />
+                </div>
+                <div class="word-wrap col-sm-4 form-group">
+                    <label for="market_capacity_price">Market capacity:</label>
+                    <input  id="market_capacity_price"  class="form-control" placeholder="Company abbreviation" autocomplete="off" ng-class="{'required-error' : ((modalCtrl.sharesForm.market_capacity_price.$error.required || modalCtrl.sharesForm.market_capacity_price.$error.min) && (modalCtrl.sharesForm.market_capacity_price.$dirty || modalCtrl.sharesForm.$submitted)) || (modalCtrl.sharesForm.market_capacity_price.$error.pattern && (modalCtrl.sharesForm.market_capacity_price.$dirty || modalCtrl.sharesForm.$submitted))}"
+                        ng-required="true" type="number" min="0" name="market_capacity_price" ng-model="modalCtrl.share_info.market_capacity.price" 
+                    />
+                </div>  
+                <div class="word-wrap col-sm-4 form-group">
+                    <label for="market_capacity_currency">Market capacity:</label>
+                    <select  id="market_capacity_currency"  class="form-control" placeholder="Company abbreviation" autocomplete="off" ng-class="{'required-error' : (modalCtrl.sharesForm.market_capacity_currency.$error.required && (modalCtrl.sharesForm.market_capacity_currency.$dirty || modalCtrl.sharesForm.$submitted)) || (modalCtrl.sharesForm.market_capacity_currency.$error.pattern && (modalCtrl.sharesForm.market_capacity_currency.$dirty || modalCtrl.sharesForm.$submitted))}"
+                        ng-required="true" type="text" name="market_capacity_currency" ng-model="modalCtrl.share_info.market_capacity.currency" 
+                    >
+                        <option value="">Select Currency</option>
+                        <option value="B">Bitcoin</option>
+                        <option value="$">US dollar</option>
+                        <option value="₹">Indian rupee</option>
+                </select>
+                </div>  
+            </div>  
+        </div>
+        <div class="modal-footer text-align-left no-border">
+            <button class="btn btn-primary font-weight-bold btn-success" type="submit" ng-bind="modalCtrl.buttonTitle"></button>
+            <button class="btn btn-primary font-weight-bold btn-success"  type="button"  ng-click="modalCtrl.dismiss();">Cancel</button>
+        </div>
+    </form>
+</script>
