@@ -18,7 +18,7 @@
     "lodash": "^4.17.5",
     "angular-ui-router": "^1.0.15",
     "angular": "^1.6.9",
-    "bootstrap-css-only": "^4.0.0",
+    "bootstrap-css-only": "3.3.7",
     "sweetalert2": "^7.18.0",
     "angular-ui-notification": "^0.3.6",
     "angular-bootstrap": "^2.5.0"
